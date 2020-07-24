@@ -7,20 +7,23 @@ Usage
 -----
 
 ```
+package main
+
 import (
+  "fmt"
   dd "github.com/aprimadi/go-delta-debugging"
 )
 
 // A simple FSM that becomes faulty when it contains an event "3"
 type SimpleFSM struct {
-  events []Event
+  events []dd.Event
 }
 
 // Reset the FSM state
 func (f *SimpleFSM) Reset() {}
 
 // Apply events to the FSM
-func (f *SimpleFSM) Apply(events []Event) {
+func (f *SimpleFSM) Apply(events []dd.Event) {
   f.events = events
 }
 
@@ -35,8 +38,8 @@ func (f *SimpleFSM) Valid() bool {
 }
 
 func main() {
-  fsm := SimpleFSM{}
-  result := dd.DeltaDebug(fsm, []Event{1, 2, 3, 4, 5, 6, 7, 8})
-  fmt.Println(result) // Print: []Event{3}
+  fsm := &SimpleFSM{}
+  result := dd.DeltaDebug(fsm, []dd.Event{1, 2, 3, 4, 5, 6, 7, 8})
+  fmt.Println(result) // Print: [3]
 }
 ```
